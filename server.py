@@ -5,6 +5,7 @@ from Crypto.Cipher import AES
 import subprocess
 import os
 import pickle
+import math
 
 KEYFILE = "claudias-keys.pickle"
 

@@ -1,9 +1,11 @@
 import socket
 import re
 import decimal
+from Crypto.Util.number import *
+from Crypto.Cipher import AES
 
 # TODO: Replace password
-PASSWORD = b""
+PASSWORD = b"f2aa724b2f528763"
 
 def recv_until(s, needle):
     """Receive data from a socket connection until the needle appears"""
@@ -41,6 +43,13 @@ enc_msg = bytes.fromhex(re.search("enc_msg = ([0-9a-f]*)", msg).group(1))
 decimal.getcontext().prec = N.bit_length()
 
 # TODO: Modify the lines below to your needs
+
+enc_k_decrypted = pow(enc_k, 1/e)
+k = long_to_bytes(enc_k_decrypted)[:16]
+cipher = AES.new(key=k, mode=AES.MODE_CTR)
+msg_decrypted = cipher.decrypt(enc_msg)
+print(msg_decrypted)
+
 s.sendall(f"{enc_msg.hex()}\n".encode())
 answer = s.recv(1024)
-print(answer)
+print(answer) 
